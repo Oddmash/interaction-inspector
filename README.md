@@ -36,4 +36,4 @@ npm run test:e2e
 
 Unit tests run with Node's test runner. The Playwright smoke test loads a temporary copy of the built MV3 extension and uses test-only injection and an open shadow root on the intercepted demo origin. Use the toolbar instructions above to smoke-test the production activation path manually.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute. Released under the [MIT License](LICENSE).
+See the [Oddmash contribution guide](https://github.com/Oddmash/.github/blob/main/CONTRIBUTING.md) for how to contribute. Released under the [MIT License](LICENSE).
