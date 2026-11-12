@@ -70,7 +70,12 @@ test('the production toolbar action opens the inspector using activeTab', { time
     ], { stdio: ['ignore', 'ignore', 'ignore', 'pipe', 'pipe'] });
     const send = connect(browser);
     const { id } = await send('Extensions.loadUnpacked', { path: dist });
+    const listTabs = async () => (await send('Target.getTargets', {
+      filter: [{ type: 'tab' }, { exclude: true }],
+    })).targetInfos;
+    const priorTabs = new Set((await listTabs()).map((tab) => tab.targetId));
     const { targetId } = await send('Target.createTarget', { url });
+    const tab = await poll(async () => (await listTabs()).find(({ targetId }) => !priorTabs.has(targetId)));
     const { sessionId } = await send('Target.attachToTarget', { targetId, flatten: true });
     const evaluate = async (expression) => {
       const { result } = await send('Runtime.evaluate', { expression, returnByValue: true }, sessionId);
@@ -80,12 +85,12 @@ test('the production toolbar action opens the inspector using activeTab', { time
     const count = () => evaluate("document.querySelectorAll('[data-oddmash-inspector]').length");
     assert.equal(await count(), 0);
     await send('Target.activateTarget', { targetId });
-    await send('Extensions.triggerAction', { id, targetId });
+    await send('Extensions.triggerAction', { id, targetId: tab.targetId });
     await poll(() => count());
     const { root } = await send('DOM.getDocument', { depth: -1, pierce: true }, sessionId);
     const flatten = (node) => [node, ...[...(node.children ?? []), ...(node.shadowRoots ?? [])].flatMap(flatten)];
     assert.ok(flatten(root).some((node) => node.nodeValue === 'Interaction Inspector'));
-    await send('Extensions.triggerAction', { id, targetId });
+    await send('Extensions.triggerAction', { id, targetId: tab.targetId });
     assert.equal(await count(), 1);
   } finally {
     if (browser && browser.exitCode === null && browser.signalCode === null && browser.pid) {
