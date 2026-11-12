@@ -1,5 +1,7 @@
 # Interaction Inspector
 
+**English** · [한국어](docs/ko/README.md) · [日本語](docs/ja/README.md) · [简体中文](docs/zh-CN/README.md)
+
 A Chrome Manifest V3 extension for debugging DOM interactions and keyboard focus. Built by [Oddmash](https://github.com/Oddmash) with TypeScript, Vite, React, and SCSS.
 
 ## Run the extension
@@ -34,6 +36,6 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Unit tests run with Node's test runner. The Playwright smoke test loads a temporary copy of the built MV3 extension and uses test-only injection and an open shadow root on the intercepted demo origin. Use the toolbar instructions above to smoke-test the production activation path manually.
+Unit tests run with Node's test runner. The Playwright smoke test loads a temporary copy of the built MV3 extension and uses test-only injection and an open shadow root on the intercepted demo origin. A separate Chromium test invokes the actual toolbar action through DevTools Protocol using the unchanged production manifest.
 
-See the [Oddmash contribution guide](https://github.com/Oddmash/.github/blob/main/CONTRIBUTING.md) for how to contribute. Released under the [MIT License](LICENSE).
+See the [Oddmash contribution guide](https://github.com/Oddmash/.github/blob/main/CONTRIBUTING.md) for how to contribute. Released under the [MIT License](LICENSE). Reference translations are available in [한국어](docs/ko/LICENSE.md), [日本語](docs/ja/LICENSE.md), and [简体中文](docs/zh-CN/LICENSE.md).
