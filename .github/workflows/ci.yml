@@ -13,14 +13,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 24
-      - name: Generate cross-platform lockfile
-        run: |
-          rm package-lock.json
-          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-      - uses: actions/upload-artifact@v4
-        with:
-          name: npm-lockfile
-          path: package-lock.json
+          cache: npm
       - run: npm ci
       - run: npm test
       - run: npm run build
