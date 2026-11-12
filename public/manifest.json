@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "Interaction Inspector",
+  "version": "0.1.0",
+  "description": "Inspect DOM events, focus, and element state on the active tab.",
+  "permissions": ["activeTab", "scripting"],
+  "background": { "service_worker": "worker.js" },
+  "action": { "default_title": "Open Interaction Inspector" }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "interaction-inspector",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "build": "tsc --noEmit && vite build --mode worker && vite build --mode inspector",
+    "test": "node --test tests/privacy.test.mjs",
+    "test:e2e": "node --test tests/extension.test.mjs",
+    "demo": "vite --host 127.0.0.1"
+  },
+  "dependencies": { "react": "19.2.8", "react-dom": "19.2.8" },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "playwright": "1.65.0",
+    "sass": "1.97.1",
+    "typescript": "5.9.3",
+    "vite": "7.3.1"
+  }
+}

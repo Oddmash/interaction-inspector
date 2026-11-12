@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interaction Inspector demo</title>
+  <style>
+    body { font: 16px/1.5 system-ui; margin: 3rem; max-width: 36rem; color: #172136; }
+    section { display: grid; gap: 1rem; justify-items: start; }
+    button, input { font: inherit; }
+    :focus-visible { outline: 3px solid #285ec5; outline-offset: 3px; }
+  </style>
+  <main>
+    <h1>Interaction Inspector demo</h1>
+    <p>Pick the disclosure button, start recording, and use Tab and Enter. Click the button to change its ARIA state.</p>
+    <section>
+      <button id="disclosure" aria-expanded="false" aria-controls="details">Toggle details</button>
+      <p id="details" hidden>Disclosure content</p>
+      <label>Example input <input type="text" autocomplete="off"></label>
+      <label>Example password <input type="password" autocomplete="off"></label>
+      <span tabindex="0">Custom tab stop</span>
+    </section>
+  </main>
+  <script type="module" src="./demo.js"></script>
+</html>
