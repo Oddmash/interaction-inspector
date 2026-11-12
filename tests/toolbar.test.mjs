@@ -70,23 +70,41 @@ test('the production toolbar action opens the inspector using activeTab', { time
     ], { stdio: ['ignore', 'ignore', 'ignore', 'pipe', 'pipe'] });
     const send = connect(browser);
     const { id } = await send('Extensions.loadUnpacked', { path: dist });
-    const listTabs = async () => (await send('Target.getTargets', {
-      filter: [{ type: 'tab' }, { exclude: true }],
+    const listTargets = async (type) => (await send('Target.getTargets', {
+      filter: [{ type }, { exclude: true }],
     })).targetInfos;
-    const priorTabs = new Set((await listTabs()).map((tab) => tab.targetId));
-    const { targetId } = await send('Target.createTarget', { url });
-    const tab = await poll(async () => (await listTabs()).find(({ targetId }) => !priorTabs.has(targetId)));
-    const { sessionId } = await send('Target.attachToTarget', { targetId, flatten: true });
-    const evaluate = async (expression) => {
-      const { result } = await send('Runtime.evaluate', { expression, returnByValue: true }, sessionId);
+    const tab = await poll(async () => (await listTargets('tab'))[0]);
+    const page = await poll(async () => (await listTargets('page'))[0]);
+    const worker = await poll(async () => (await listTargets('service_worker')).find(
+      ({ url }) => url === `chrome-extension://${id}/worker.js`,
+    ));
+    const { sessionId } = await send('Target.attachToTarget', { targetId: page.targetId, flatten: true });
+    const { sessionId: workerSession } = await send('Target.attachToTarget', {
+      targetId: worker.targetId, flatten: true,
+    });
+    const evaluate = async (expression, target = sessionId) => {
+      const { result, exceptionDetails } = await send('Runtime.evaluate', {
+        expression, returnByValue: true, awaitPromise: true,
+      }, target);
+      if (exceptionDetails) throw new Error(result.description ?? exceptionDetails.text);
       return result.value;
     };
+    await poll(() => evaluate('chrome.action.onClicked.hasListeners()', workerSession));
+    await send('Page.navigate', { url }, sessionId);
     await poll(() => evaluate("document.title === 'Toolbar test'"));
     const count = () => evaluate("document.querySelectorAll('[data-oddmash-inspector]').length");
     assert.equal(await count(), 0);
-    await send('Target.activateTarget', { targetId });
+    await send('Target.activateTarget', { targetId: page.targetId });
     await send('Extensions.triggerAction', { id, targetId: tab.targetId });
-    await poll(() => count());
+    try {
+      await poll(() => count());
+    } catch (error) {
+      const activeTab = await evaluate(`(async () => {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        return { url: tab?.url, badge: tab && await chrome.action.getBadgeText({ tabId: tab.id }) };
+      })()`, workerSession);
+      throw new Error(`Inspector did not mount on the active tab: ${JSON.stringify(activeTab)}`, { cause: error });
+    }
     const { root } = await send('DOM.getDocument', { depth: -1, pierce: true }, sessionId);
     const flatten = (node) => [node, ...[...(node.children ?? []), ...(node.shadowRoots ?? [])].flatMap(flatten)];
     assert.ok(flatten(root).some((node) => node.nodeValue === 'Interaction Inspector'));
