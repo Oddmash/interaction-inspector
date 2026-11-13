@@ -81,6 +81,16 @@ test('MV3 inspector picks, observes, protects input, stops, resets, and closes',
     assert.doesNotMatch(await timeline.innerText(), /Example password|\bS\b/);
     await panel.getByRole('button', { name: 'Stop' }).click();
     const count = await timeline.getByRole('listitem').count();
+    const eventType = panel.getByLabel('Event type');
+    await eventType.selectOption('click');
+    await timeline.getByText('click', { exact: true }).first().waitFor();
+    assert.ok((await timeline.getByRole('listitem').count()) < count);
+    assert.equal(await timeline.getByText('keydown', { exact: true }).count(), 0);
+    await eventType.selectOption('all');
+    await panel.getByLabel('Selected element').check();
+    assert.equal(await timeline.getByText('input', { exact: true }).count(), 0);
+    await panel.getByLabel('Selected element').uncheck();
+    assert.equal(await timeline.getByRole('listitem').count(), count);
     await button.click();
     assert.equal(await timeline.getByRole('listitem').count(), count);
     await panel.getByRole('button', { name: 'Reset' }).click();

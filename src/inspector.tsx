@@ -5,7 +5,7 @@ import { classifyModality, eventTypes, labelForTag, readAria, readTabIndex } fro
 import type { EventType } from './privacy';
 
 
-type Entry = { id: number; elapsed: number; type: EventType; target: string };
+type Entry = { id: number; elapsed: number; type: EventType; target: string; targetId: number };
 type Snapshot = {
   tag: string;
   focused: boolean;
@@ -51,6 +51,15 @@ const mount = () => {
   let sequence = 0;
   let startTime = 0;
   let selected: Element | null = null;
+  let targetIds = new WeakMap<Element, number>();
+  let nextTargetId = 0;
+  const identify = (element: Element) => {
+    const id = targetIds.get(element);
+    if (id !== undefined) return id;
+    const newId = ++nextTargetId;
+    targetIds.set(element, newId);
+    return newId;
+  };
   let frame = 0;
   const root = createRoot(container);
 
@@ -59,6 +68,8 @@ const mount = () => {
     const [picking, setPicking] = useState(false);
     const [entries, setEntries] = useState<Entry[]>([]);
     const [current, setCurrent] = useState<Snapshot | null>(null);
+    const [eventFilter, setEventFilter] = useState<EventType | 'all'>('all');
+    const [selectedOnly, setSelectedOnly] = useState(false);
 
     const highlight = (element: Element | null) => {
       overlay.hidden = !element?.isConnected;
@@ -164,6 +175,7 @@ const mount = () => {
         elapsed: Math.round(performance.now() - startTime),
         type: event.type as EventType,
         target: labelForTag(target.localName),
+        targetId: identify(target),
       };
       setEntries((previous) => [...previous.slice(-199), entry]);
     };
@@ -190,6 +202,10 @@ const mount = () => {
       clearSelection();
       sequence = 0;
       setEntries([]);
+      setEventFilter('all');
+      setSelectedOnly(false);
+      targetIds = new WeakMap();
+      nextTargetId = 0;
     };
 
     const close = () => {
@@ -213,7 +229,12 @@ const mount = () => {
       };
     }, []);
 
-    const latest = entries.at(-1);
+    const selectedId = selected ? identify(selected) : undefined;
+    const visibleEntries = entries.filter(({ type, targetId }) =>
+      (eventFilter === 'all' || type === eventFilter) &&
+      (!selectedOnly || selectedId === undefined || targetId === selectedId),
+    );
+    const latest = visibleEntries.at(-1);
     return (
       <section aria-label="Interaction Inspector" className="panel">
         <header><h1>Interaction Inspector</h1><button onClick={close} aria-label="Close inspector">×</button></header>
@@ -236,15 +257,29 @@ const mount = () => {
           </dl>
         ) : <p>Pick an element to inspect its state.</p>}
         <h2>Observed events <span>· {entries.length} / 200</span></h2>
-        {entries.length ? (
+        <div className="filters">
+          <label>Event type
+            <select value={eventFilter} onChange={(event) =>
+              setEventFilter(event.target.value as EventType | 'all')}>
+              <option value="all">All events</option>
+              {eventTypes.map((type) => <option key={type}>{type}</option>)}
+            </select>
+          </label>
+          <label>
+            <input type="checkbox" checked={selectedOnly && selectedId !== undefined}
+              disabled={selectedId === undefined} onChange={(event) => setSelectedOnly(event.target.checked)} />
+            Selected element
+          </label>
+        </div>
+        {visibleEntries.length ? (
           <ol aria-label="Event timeline" className="timeline">
-            {[...entries].reverse().map(({ id, elapsed, type, target }) =>
+            {[...visibleEntries].reverse().map(({ id, elapsed, type, target }) =>
               <li key={id}><time>{elapsed} ms</time><strong>{type}</strong><code>{target}</code></li>,
             )}
           </ol>
-        ) : <p>No events recorded.</p>}
+        ) : <p>{entries.length ? 'No events match these filters.' : 'No events recorded.'}</p>}
         <h2>Inference</h2>
-        <p>{latest ? `Latest event modality: ${classifyModality(latest.type)}` : 'No interaction to classify.'}</p>
+        <p>{latest ? `Latest visible event modality: ${classifyModality(latest.type)}` : 'No interaction to classify.'}</p>
       </section>
     );
   };
