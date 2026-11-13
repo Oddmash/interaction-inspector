@@ -69,6 +69,7 @@ test('MV3 inspector picks, observes, protects input, stops, resets, and closes',
     await button.press('Tab');
     await page.keyboard.press('Shift+Tab');
     await field(/^:focus-visible$/).filter({ hasText: /^true$/ }).waitFor();
+    await page.screenshot({ path: 'inspector-demo.png', animations: 'disabled' });
     const password = page.getByLabel('Example password');
     await password.focus();
     const timeline = panel.getByRole('list', { name: 'Event timeline' });
