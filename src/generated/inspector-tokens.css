@@ -1,0 +1,10 @@
+.panel {
+  --om-semantic-color-bg: #151921;
+  --om-semantic-color-surface: #242d3b;
+  --om-semantic-color-text: #f0f3fa;
+  --om-semantic-color-muted: #bbc7d8;
+  --om-semantic-color-border: #59677b;
+  --om-semantic-color-focus: #9bd9ff;
+  --om-inspector-panel-border: #475468;
+  --om-inspector-hover: #394960;
+}

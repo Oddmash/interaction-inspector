@@ -48,3 +48,7 @@ npm run test:e2e
 单元测试使用 Node 测试运行器。Playwright 冒烟测试通过构建后 MV3 扩展的临时副本，在测试页面注入脚本并通过开放的 Shadow Root 验证交互。另一个 Chromium 测试使用原样的生产清单，通过 DevTools Protocol 触发实际的工具栏操作。
 
 [Oddmash 贡献指南](https://github.com/Oddmash/.github/blob/main/docs/zh-CN/CONTRIBUTING.md) · [MIT 许可证原文](../../LICENSE) · [简体中文译文](LICENSE.md)
+
+## Oddmash UI
+
+使用 [Oddmash UI](https://github.com/Oddmash/oddmash-ui) 的 Button 和面板令牌覆盖，不改变记录、隐私或权限逻辑。项目颜色的原始来源为 `tokens/inspector.json`。运行 `npm run tokens` 生成 CSS，运行 `npm run tokens:check` 检查一致性。在批准 npm 发布之前，依赖固定到 Git 提交；安装时构建 UI 包，因此需要 Node 24。样式保留在现有 Shadow DOM 内部。[集成详情](../UI-INTEGRATION.md)。

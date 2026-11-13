@@ -1,3 +1,5 @@
+@use 'generated/inspector-tokens.css';
+
 :host {
   all: initial !important;
   position: fixed !important;
@@ -15,9 +17,9 @@
   box-sizing: border-box;
   overflow: auto;
   pointer-events: auto;
-  background: #151921;
-  color: #f0f3fa;
-  border: 1px solid #475468;
+  background: var(--om-semantic-color-bg);
+  color: var(--om-semantic-color-text);
+  border: 1px solid var(--om-inspector-panel-border);
   border-radius: 12px;
   box-shadow: 0 12px 36px #0007;
   padding: 16px;
@@ -33,18 +35,21 @@
   header { justify-content: space-between; margin-bottom: 12px; }
   h1 { font-size: 17px; margin: 0; }
   h2 { font-size: 13px; margin: 14px 0 4px; }
-  h2 span, time, p { color: #bbc7d8; }
+  h2 span, time, p { color: var(--om-semantic-color-muted); }
   p { margin: 6px 0; }
   button {
+    display: inline-block;
+    min-height: 0;
+    transition: none;
     font: inherit;
     color: inherit;
-    background: #242d3b;
-    border: 1px solid #59677b;
+    background: var(--om-semantic-color-surface);
+    border: 1px solid var(--om-semantic-color-border);
     border-radius: 6px;
     padding: 4px 9px;
     cursor: pointer;
   }
-  button:hover, button[aria-pressed='true'] { background: #394960; }
+  button.om-button:hover:not(:disabled), button.om-button[aria-pressed='true'] { background: var(--om-inspector-hover); }
   .filters {
     display: flex;
     flex-wrap: wrap;
@@ -57,13 +62,13 @@
   .filters select {
     font: inherit;
     color: inherit;
-    background: #242d3b;
-    border: 1px solid #59677b;
+    background: var(--om-semantic-color-surface);
+    border: 1px solid var(--om-semantic-color-border);
     border-radius: 6px;
     padding: 3px 4px;
   }
   .filters label:has(:disabled) { color: #9caabd; }
-  :is(button, select, input):focus-visible { outline: 2px solid #9bd9ff; outline-offset: 2px; }
+  :is(button, select, input):focus-visible { outline: 2px solid var(--om-semantic-color-focus); outline-offset: 2px; }
   dl { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 8px; margin: 0; }
   dl div { display: contents; }
   dd { margin: 0; }

@@ -7,12 +7,15 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "tsc --noEmit && vite build --mode worker && vite build --mode inspector",
+    "build": "npm run tokens && tsc --noEmit && vite build --mode worker && vite build --mode inspector",
     "test": "node --test tests/privacy.test.mjs",
     "test:e2e": "node --test tests/extension.test.mjs tests/toolbar.test.mjs",
-    "demo": "vite --host 127.0.0.1"
+    "demo": "vite --host 127.0.0.1",
+    "tokens": "node scripts/tokens.mjs",
+    "tokens:check": "node scripts/tokens.mjs --check"
   },
   "dependencies": {
+    "@oddmash/ui": "github:Oddmash/oddmash-ui#b683b86420019f0733e4bacb3b250eca67bd3a4b",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
@@ -21,6 +24,7 @@
     "@types/react-dom": "19.2.7",
     "playwright": "1.65.0",
     "sass": "1.97.1",
+    "style-dictionary": "^5.8.0",
     "typescript": "5.9.3",
     "vite": "7.3.1"
   }
