@@ -48,3 +48,7 @@ npm run test:e2e
 단위 테스트는 Node 테스트 러너로 실행합니다. Playwright 스모크 테스트는 빌드된 MV3 확장의 임시 복사본을 사용해 테스트 페이지에 스크립트를 삽입하고 열린 섀도 루트에서 동작을 확인합니다. 별도 Chromium 테스트는 프로덕션 매니페스트를 그대로 사용해 DevTools Protocol로 실제 툴바 액션을 실행합니다.
 
 [Oddmash 기여 가이드](https://github.com/Oddmash/.github/blob/main/docs/ko/CONTRIBUTING.md) · [MIT 라이선스 원문](../../LICENSE) · [한국어 번역](LICENSE.md)
+
+## Oddmash UI
+
+[Oddmash UI](https://github.com/Oddmash/oddmash-ui)의 Button과 패널 토큰 override를 사용합니다. 기록·개인정보·권한 동작은 그대로입니다. 프로젝트 색상 원본은 `tokens/inspector.json`입니다. `npm run tokens`로 CSS를 생성하고 `npm run tokens:check`로 일치 여부를 검사합니다. 승인된 npm 릴리스 전까지 Git 커밋에 의존성을 고정하며 설치 시 UI 패키지를 빌드하므로 Node 24가 필요합니다. 스타일은 기존 Shadow DOM 내부에 유지합니다. [연결 상세](../UI-INTEGRATION.md).

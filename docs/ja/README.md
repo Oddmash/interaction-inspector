@@ -48,3 +48,7 @@ npm run test:e2e
 単体テストは Node のテストランナーで実行します。Playwright のスモークテストはビルド済み MV3 拡張機能の一時コピーを使い、テストページへの挿入と開いたシャドウルート上での操作を確認します。別の Chromium テストは本番のマニフェストをそのまま使い、DevTools Protocol 経由で実際のツールバーアクションを実行します。
 
 [Oddmash コントリビューションガイド](https://github.com/Oddmash/.github/blob/main/docs/ja/CONTRIBUTING.md) · [MIT ライセンス原文](../../LICENSE) · [日本語訳](LICENSE.md)
+
+## Oddmash UI
+
+[Oddmash UI](https://github.com/Oddmash/oddmash-ui) の Button とパネルのトークン上書きを使用します。記録・プライバシー・権限は変更しません。色の原本は `tokens/inspector.json` です。`npm run tokens` で CSS を生成し、`npm run tokens:check` で一致を確認します。承認済み npm リリースまでは Git コミットに固定し、インストール時に UI をビルドするため Node 24 が必要です。スタイルは既存の Shadow DOM 内に維持します。[統合詳細](../UI-INTEGRATION.md)。

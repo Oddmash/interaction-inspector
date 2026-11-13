@@ -48,3 +48,7 @@ npm run test:e2e
 Unit tests run with Node's test runner. The Playwright smoke test loads a temporary copy of the built MV3 extension and uses test-only injection and an open shadow root on the intercepted demo origin. A separate Chromium test invokes the actual toolbar action through DevTools Protocol using the unchanged production manifest.
 
 See the [Oddmash contribution guide](https://github.com/Oddmash/.github/blob/main/CONTRIBUTING.md) for how to contribute. Released under the [MIT License](LICENSE). Reference translations are available in [한국어](docs/ko/LICENSE.md), [日本語](docs/ja/LICENSE.md), and [简体中文](docs/zh-CN/LICENSE.md).
+
+## Oddmash UI
+
+UI foundations use [Oddmash UI](https://github.com/Oddmash/oddmash-ui). Only Button and panel token overrides are integrated; recording, privacy and permissions are unchanged. Project colors live in `tokens/inspector.json`. Run `npm run tokens` to generate CSS and `npm run tokens:check` to check freshness. The dependency is pinned to a Git commit until an approved npm release; installation builds the UI package and requires Node 24. Styles stay inside the existing Shadow DOM. [Integration details](docs/UI-INTEGRATION.md).
