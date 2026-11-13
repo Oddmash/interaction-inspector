@@ -89,7 +89,7 @@ test('the production toolbar action opens the inspector using activeTab', { time
       if (exceptionDetails) throw new Error(result.description ?? exceptionDetails.text);
       return result.value;
     };
-    await poll(() => evaluate('chrome.action.onClicked.hasListeners()', workerSession));
+    await poll(() => evaluate('globalThis.chrome?.action?.onClicked?.hasListeners() === true', workerSession));
     await send('Page.navigate', { url }, sessionId);
     await poll(() => evaluate("document.title === 'Toolbar test'"));
     const count = () => evaluate("document.querySelectorAll('[data-oddmash-inspector]').length");
