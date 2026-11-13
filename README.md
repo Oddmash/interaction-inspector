@@ -4,9 +4,9 @@
 
 See what happens between a key press and a UI change. Interaction Inspector is a Chrome extension that shows DOM events, keyboard focus, and ARIA state together on the page you’re debugging.
 
-![Illustrated preview of the inspector showing a highlighted disclosure button, its focus and ARIA state, and an event timeline](docs/assets/inspector-preview.png)
+![Interaction Inspector running in Chromium on the disclosure demo. The highlighted button, focus and ARIA state, and recorded events are visible.](docs/assets/inspector-demo.png)
 
-*Preview of the disclosure demo. The panel shows the selected element’s state and the events recorded during the interaction.*
+*Captured in Chromium while running the extension on the disclosure demo.*
 
 ## Why use it?
 
@@ -25,6 +25,7 @@ When a disclosure opens with a mouse but behaves differently with the keyboard, 
 - Highlight the hovered element while picking, then keep the selected element highlighted.
 - See live `:focus`, `:focus-visible`, declared tabindex category, and selected ARIA state tokens. Naming attributes and the role attribute are shown by presence.
 - Review the latest 200 trusted `focusin`, `focusout`, `click`, and `keydown` events in reverse chronological order. Each entry contains elapsed session time, event type, and an allowlisted element tag.
+- Filter the timeline by event type or limit it to events whose target is the selected element. Element matching uses temporary in-memory identifiers.
 - See a separate modality inference. A keydown indicates keyboard activity. Click and focus events have undetermined modality.
 
 The inspector covers the top-level document. Events inside iframes and closed shadow roots are outside its scope. Chrome restricts injection on certain pages, including internal browser pages and the Chrome Web Store. An × on the toolbar icon indicates injection failed.
