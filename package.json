@@ -15,7 +15,7 @@
     "tokens:check": "node scripts/tokens.mjs --check"
   },
   "dependencies": {
-    "@oddmash/ui": "github:Oddmash/oddmash-ui#b683b86420019f0733e4bacb3b250eca67bd3a4b",
+    "@oddmash/ui": "git+https://github.com/Oddmash/oddmash-ui.git#b683b86420019f0733e4bacb3b250eca67bd3a4b",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
