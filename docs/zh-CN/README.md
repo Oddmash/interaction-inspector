@@ -2,7 +2,15 @@
 
 [English](../../README.md) · [한국어](../ko/README.md) · [日本語](../ja/README.md) · **简体中文**
 
-这是一个用于调试 DOM 交互和键盘焦点的 Chrome Manifest V3 扩展，由 [Oddmash](https://github.com/Oddmash) 使用 TypeScript、Vite、React 和 SCSS 开发。
+查看从按下按键到界面变化之间发生了什么。Interaction Inspector 是一款 Chrome 扩展，可在正在调试的页面上同时显示 DOM 事件、键盘焦点和 ARIA 状态。
+
+![检查器示意图，展示高亮的展开按钮、焦点和 ARIA 状态以及事件时间线](../assets/inspector-preview.png)
+
+*展开详情演示的示意图。面板显示选中元素的状态，以及操作期间记录的事件。*
+
+## 什么时候用？
+
+如果用鼠标和键盘操作展开按钮时表现不同，选中该按钮并复现问题。你可以查看触发了哪些事件、焦点指示是否仍然可见，以及 `aria-expanded` 是否发生变化。
 
 ## 运行扩展
 

@@ -2,7 +2,15 @@
 
 [English](../../README.md) · **한국어** · [日本語](../ja/README.md) · [简体中文](../zh-CN/README.md)
 
-DOM 상호작용과 키보드 포커스를 디버깅하는 Chrome Manifest V3 확장 프로그램입니다. [Oddmash](https://github.com/Oddmash)가 TypeScript, Vite, React, SCSS로 만들었습니다.
+키를 누른 순간부터 화면이 바뀔 때까지 무슨 일이 일어났는지 확인하세요. Interaction Inspector는 디버깅 중인 페이지 위에서 DOM 이벤트, 키보드 포커스, ARIA 상태를 함께 보여주는 Chrome 확장 프로그램입니다.
+
+![강조 표시된 상세 영역 버튼과 포커스·ARIA 상태 및 이벤트 타임라인을 보여주는 검사기 예시 이미지](../assets/inspector-preview.png)
+
+*상세 영역 데모 예시입니다. 패널에서 선택한 요소의 상태와 상호작용 중 기록된 이벤트를 확인할 수 있습니다.*
+
+## 언제 쓰나요?
+
+마우스로는 잘 열리는 상세 영역이 키보드에서는 다르게 동작할 때, 버튼을 선택하고 문제를 재현해 보세요. 어떤 이벤트가 발생했는지, 포커스 표시가 유지됐는지, `aria-expanded`가 바뀌었는지 확인할 수 있습니다.
 
 ## 확장 프로그램 실행
 

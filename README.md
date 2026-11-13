@@ -2,7 +2,15 @@
 
 **English** · [한국어](docs/ko/README.md) · [日本語](docs/ja/README.md) · [简体中文](docs/zh-CN/README.md)
 
-A Chrome Manifest V3 extension for debugging DOM interactions and keyboard focus. Built by [Oddmash](https://github.com/Oddmash) with TypeScript, Vite, React, and SCSS.
+See what happens between a key press and a UI change. Interaction Inspector is a Chrome extension that shows DOM events, keyboard focus, and ARIA state together on the page you’re debugging.
+
+![Illustrated preview of the inspector showing a highlighted disclosure button, its focus and ARIA state, and an event timeline](docs/assets/inspector-preview.png)
+
+*Preview of the disclosure demo. The panel shows the selected element’s state and the events recorded during the interaction.*
+
+## Why use it?
+
+When a disclosure opens with a mouse but behaves differently with the keyboard, pick the button and reproduce the interaction. Check which events fired, whether focus stayed visible, and whether `aria-expanded` changed.
 
 ## Run the extension
 

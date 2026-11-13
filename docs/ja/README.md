@@ -2,7 +2,15 @@
 
 [English](../../README.md) · [한국어](../ko/README.md) · **日本語** · [简体中文](../zh-CN/README.md)
 
-DOM の操作とキーボードフォーカスをデバッグするための Chrome Manifest V3 拡張機能です。[Oddmash](https://github.com/Oddmash) が TypeScript、Vite、React、SCSS で開発しています。
+キーを押してから画面が変わるまでの動きを確認できます。Interaction Inspector は、デバッグ中のページ上で DOM イベント、キーボードフォーカス、ARIA の状態をまとめて表示する Chrome 拡張機能です。
+
+![強調表示された詳細ボタン、フォーカスと ARIA の状態、イベントタイムラインを示すプレビュー画像](../assets/inspector-preview.png)
+
+*詳細を開閉するデモのイメージです。パネルに選択した要素の状態と操作中に記録したイベントが表示されます。*
+
+## どんなときに使う？
+
+マウスとキーボードで詳細ボタンの動きが異なるときは、ボタンを選択して操作を再現します。発生したイベント、フォーカス表示が維持されたかどうか、`aria-expanded` の変化を確認できます。
 
 ## 拡張機能を実行する
 
