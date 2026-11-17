@@ -3,6 +3,7 @@
   "name": "Interaction Inspector",
   "version": "0.1.0",
   "description": "Inspect DOM events, focus, and element state on the active tab.",
+  "icons": { "128": "icon-128.png" },
   "permissions": ["activeTab", "scripting"],
   "background": { "service_worker": "worker.js" },
   "action": { "default_title": "Open Interaction Inspector" }
