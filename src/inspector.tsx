@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Button } from '@oddmash/ui/button';
+import uiStyles from '@oddmash/ui/styles.css?inline';
 import styles from './inspector.scss?inline';
 import { classifyModality, eventTypes, labelForTag, readAria, readTabIndex } from './privacy';
 import type { EventType } from './privacy';
@@ -36,7 +38,7 @@ const mount = () => {
   host.dataset.oddmashInspector = '';
   const shadow = host.attachShadow({ mode: 'closed' });
   const sheet = new CSSStyleSheet();
-  sheet.replaceSync(styles);
+  sheet.replaceSync(uiStyles + styles);
   shadow.adoptedStyleSheets = [sheet];
   const container = document.createElement('div');
   const overlay = document.createElement('div');
@@ -237,11 +239,11 @@ const mount = () => {
     const latest = visibleEntries.at(-1);
     return (
       <section aria-label="Interaction Inspector" className="panel">
-        <header><h1>Interaction Inspector</h1><button onClick={close} aria-label="Close inspector">×</button></header>
+        <header><h1>Interaction Inspector</h1><Button variant="secondary" size="sm" onClick={close} aria-label="Close inspector">×</Button></header>
         <div className="controls">
-          <button onClick={pick} aria-pressed={picking}>{picking ? 'Cancel pick' : 'Pick element'}</button>
-          <button onClick={active ? stop : start}>{active ? 'Stop' : 'Start'}</button>
-          <button onClick={reset}>Reset</button>
+          <Button variant="secondary" size="sm" onClick={pick} aria-pressed={picking}>{picking ? 'Cancel pick' : 'Pick element'}</Button>
+          <Button variant="secondary" size="sm" onClick={active ? stop : start}>{active ? 'Stop' : 'Start'}</Button>
+          <Button variant="secondary" size="sm" onClick={reset}>Reset</Button>
         </div>
         <p role="status">{picking ? 'Click an element or press Escape.' : active ? 'Recording' : 'Recording stopped'}</p>
         <h2>Element state</h2>

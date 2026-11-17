@@ -51,6 +51,9 @@ test('MV3 inspector picks, observes, protects input, stops, resets, and closes',
     });
     await page.goto(origin);
     await panel.waitFor();
+    const pickButton = panel.getByRole('button', { name: 'Pick element' });
+    await pickButton.hover();
+    assert.equal(await pickButton.evaluate((node) => getComputedStyle(node).backgroundColor), 'rgb(57, 73, 96)');
     await panel.getByRole('button', { name: 'Pick element' }).click();
     await button.hover();
     const { root: documentNode } = await cdp.send('DOM.getDocument', { depth: -1, pierce: true });
