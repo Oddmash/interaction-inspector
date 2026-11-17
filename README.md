@@ -2,49 +2,34 @@
 
 **English** · [한국어](docs/ko/README.md) · [日本語](docs/ja/README.md) · [简体中文](docs/zh-CN/README.md)
 
-See what happens between a key press and a UI change. Interaction Inspector is a Chrome extension that shows DOM events, keyboard focus, and ARIA state together on the page you’re debugging.
+Interaction Inspector is a Chrome extension for understanding what happens between a user action and a UI change. It brings DOM events, keyboard focus, and selected ARIA state into one compact panel on the page you are debugging.
 
-![Interaction Inspector running in Chromium on the disclosure demo. The highlighted button, focus and ARIA state, and recorded events are visible.](docs/assets/inspector-demo.png)
+![Interaction Inspector running in Chromium with a selected disclosure button, focus state, ARIA state, and recorded events](docs/assets/inspector-demo.png)
 
-*Captured in Chromium while running the extension on the disclosure demo.*
+## The problem it solves
 
-## Why use it?
-
-When a disclosure opens with a mouse but behaves differently with the keyboard, pick the button and reproduce the interaction. Check which events fired, whether focus stayed visible, and whether `aria-expanded` changed.
-
-## Run the extension
-
-1. Install Node.js 24 or later. Run `npm ci` and `npm run build`.
-2. Open `chrome://extensions`, enable **Developer mode**, then use **Load unpacked** to select `dist/`.
-3. Run `npm run demo` and open the Vite URL with `/demo/` appended.
-4. Click the extension toolbar icon to open the inspector in that tab. Use **Pick element** and click the disclosure button to see its focus state, tabindex category, and ARIA state. Escape cancels picking.
-5. Select **Start**, then use Tab, Enter, and the mouse on the demo. **Stop** keeps existing events, **Reset** stops recording and clears the selection and timeline, and **×** closes the inspector.
+An interface can look correct while behaving differently for a mouse and a keyboard. When a disclosure opens but focus disappears, or `aria-expanded` does not match the visible state, the cause is often spread across DevTools panels and console output. Interaction Inspector keeps the relevant evidence together so the interaction can be reproduced and understood in context.
 
 ## What you can inspect
 
-- Highlight the hovered element while picking, then keep the selected element highlighted.
-- See live `:focus`, `:focus-visible`, declared tabindex category, and selected ARIA state tokens. Naming attributes and the role attribute are shown by presence.
-- Review the latest 200 trusted `focusin`, `focusout`, `click`, and `keydown` events in reverse chronological order. Each entry contains elapsed session time, event type, and an allowlisted element tag.
-- Filter the timeline by event type or limit it to events whose target is the selected element. Element matching uses temporary in-memory identifiers.
-- See a separate modality inference. A keydown indicates keyboard activity. Click and focus events have undetermined modality.
+- Pick an element and keep it highlighted while reproducing an interaction.
+- See live `:focus`, `:focus-visible`, tabindex category, and selected ARIA state tokens.
+- Review the latest 200 trusted `focusin`, `focusout`, `click`, and `keydown` events in a readable timeline.
+- Filter the timeline by event type or show only events targeting the selected element.
+- Compare event activity with a separate, intentionally conservative input-modality inference.
 
-The inspector covers the top-level document. Events inside iframes and closed shadow roots are outside its scope. Chrome restricts injection on certain pages, including internal browser pages and the Chrome Web Store. An × on the toolbar icon indicates injection failed.
+## A typical use case
 
-## Privacy and permissions
+Select a disclosure button that works with a mouse but feels wrong with a keyboard. Reproduce the issue, then check which events fired, whether visible focus moved as expected, and whether the ARIA state changed with the UI. The result is a focused account of the interaction rather than a general-purpose page recording.
 
-The extension uses `activeTab` and `scripting` to inject into the active tab after a toolbar click. It has no persistent host permissions, storage, network requests, or telemetry. Sessions stay in page memory and clear on document navigation, closing the panel, or resetting.
+## Privacy by design
 
-The inspector records event types without keyboard keys or codes. It never reads input values, password values, page text, IDs, classes, or free-form ARIA values. Events targeting password fields and keydowns from editable controls are omitted. The picker recognizes Escape to exit selection and does not put that key into the timeline.
+Interaction Inspector runs only after its toolbar icon is clicked. It uses `activeTab` and `scripting` without persistent host access, storage, network requests, or telemetry. Sessions remain in page memory and clear on navigation, panel close, or reset.
 
-## Development
+It records event types, not keyboard keys or codes. It does not read input values, passwords, page text, IDs, classes, or free-form ARIA values. Password-field events and keydowns from editable controls are excluded.
 
-```sh
-npm test
-npm run build
-npx playwright install chromium
-npm run test:e2e
-```
+## Scope
 
-Unit tests run with Node's test runner. The Playwright smoke test loads a temporary copy of the built MV3 extension and uses test-only injection and an open shadow root on the intercepted demo origin. A separate Chromium test invokes the actual toolbar action through DevTools Protocol using the unchanged production manifest.
+The inspector covers the top-level document. Iframes, closed shadow roots, Chrome internal pages, and the Chrome Web Store are outside its inspection boundary. The project is intentionally narrow: it helps explain a single interaction without becoming a persistent analytics or recording system.
 
-See the [Oddmash contribution guide](https://github.com/Oddmash/.github/blob/main/CONTRIBUTING.md) for how to contribute. Released under the [MIT License](LICENSE). Reference translations are available in [한국어](docs/ko/LICENSE.md), [日本語](docs/ja/LICENSE.md), and [简体中文](docs/zh-CN/LICENSE.md).
+[Contributor guide](CONTRIBUTING.md) · [MIT License](LICENSE)

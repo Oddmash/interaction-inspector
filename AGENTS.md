@@ -2,6 +2,8 @@
 
 Interaction Inspector is a privacy-sensitive Chrome extension. Preserve its narrow collection model and browser permission boundary before optimizing UI or developer ergonomics.
 
+Treat every localized README as a product introduction, not a repository setup guide. Explain what Interaction Inspector does, who it helps, a concrete debugging use case, its capabilities, privacy model, and scope. Do not put clone, install, local-run, build, test, release, or contributor workflows in a README; keep all development and verification details in `CONTRIBUTING.md`. Keep all four README translations, language links, claims, and visuals synchronized.
+
 - Keep `activeTab` and `scripting` as the only extension permissions unless the task explicitly authorizes a permission change.
 - Do not add persistent host access, storage, network requests, telemetry, or background collection.
 - Never capture keyboard keys or codes, input values, password data, page text, IDs, classes, or free-form ARIA values. Keep editable-control keydowns and password targets excluded.
