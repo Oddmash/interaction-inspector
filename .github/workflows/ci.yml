@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,12 +14,20 @@ permissions:
   contents: read
 
 jobs:
+  scope:
+    uses: Oddmash/.github/.github/workflows/ci-scope.yml@5ef0314056be10f868b9bf889b879e6d322beb1e
+    with:
+      profile: extension
   extension:
-    runs-on: ubuntu-latest
+    needs: scope
+    if: needs.scope.outputs.runtime == 'true'
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: 24
           cache: npm
@@ -28,3 +37,19 @@ jobs:
       - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+
+  verify:
+    needs: [scope, extension]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Confirm appropriate checks passed
+        env:
+          SCOPE_RESULT: ${{ needs.scope.result }}
+          RUN_0: ${{ needs.scope.outputs.runtime }}
+          RESULT_0: ${{ needs.extension.result }}
+        run: |
+          test "$SCOPE_RESULT" = success
+          verify() { case "$1:$2" in true:success|false:skipped) return 0 ;; *) return 1 ;; esac; }
+          verify "$RUN_0" "$RESULT_0"
