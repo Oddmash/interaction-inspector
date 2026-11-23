@@ -32,3 +32,7 @@ npm run test:e2e
 Unit tests use Node's test runner. The Playwright smoke test loads a temporary copy of the built MV3 extension and uses test-only injection and an open shadow root on the intercepted demo origin. A separate Chromium test invokes the real toolbar action through DevTools Protocol while keeping the production manifest unchanged.
 
 Preserve the privacy and permission boundaries in `AGENTS.md`. Any change to permissions, captured fields, session lifetime, network behavior, or the public inspection model must be called out explicitly in the pull request. Follow the [Oddmash organization contribution policy](https://github.com/Oddmash/.github/blob/main/CONTRIBUTING.md).
+
+## Public contribution language
+
+Write issue and pull request titles, bodies, public review discussions, commit messages, and changelog entries in English. Use the shared English issue and PR templates from [Oddmash](https://github.com/Oddmash/.github/blob/main/CONTRIBUTING.md). Preserve existing product documentation localization and provide translation help when needed.
