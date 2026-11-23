@@ -1,0 +1,73 @@
+name: Oddmash PR labels
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/oddmash-pr-labels.yml'
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+  workflow_dispatch:
+permissions:
+  pull-requests: write
+jobs:
+  labels:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const catalog = {
+              'type: bug': ['d73a4a', 'Fixes a defect'],
+              'type: feature': ['a2eeef', 'Adds new functionality'],
+              'type: improvement': ['84b6eb', 'Improves existing behavior'],
+              'type: docs': ['0075ca', 'Documentation changes'],
+              'type: refactor': ['c5def5', 'Internal restructuring'],
+              'type: test': ['bfdadc', 'Test coverage'],
+              'type: chore': ['e4e669', 'Maintenance or tooling'],
+              'type: other': ['ededed', 'Other change type'],
+              'size: XS': ['c2e0c6', '0–25 changed lines'],
+              'size: S': ['7ed321', '26–100 changed lines'],
+              'size: M': ['fbca04', '101–300 changed lines'],
+              'size: L': ['f9d0c4', '301–800 changed lines'],
+              'size: XL': ['d93f0b', 'More than 800 changed lines'],
+              'review: pending': ['ededed', 'Agent review pending'],
+              'review: approved': ['0e8a16', 'Agent review passed'],
+              'review: changes requested': ['d73a4a', 'Agent recommends changes'],
+              'review: needs human': ['fbca04', 'Maintainer verification needed']
+            };
+            const labels = await github.paginate(github.rest.issues.listLabelsForRepo, { owner, repo, per_page: 100 });
+            const existing = new Set(labels.map(label => label.name));
+            for (const [name, [color, description]] of Object.entries(catalog)) {
+              if (existing.has(name)) continue;
+              try {
+                await github.rest.issues.createLabel({ owner, repo, name, color, description });
+              } catch (error) {
+                if (error.status !== 422) throw error;
+                await github.rest.issues.getLabel({ owner, repo, name });
+              }
+            }
+            const prNumbers = context.payload.pull_request
+              ? [context.payload.pull_request.number]
+              : (await github.paginate(github.rest.pulls.list, { owner, repo, state: 'open', per_page: 100 })).map(pr => pr.number);
+            const types = { fix: 'bug', bug: 'bug', feat: 'feature', feature: 'feature', perf: 'improvement', improvement: 'improvement', docs: 'docs', refactor: 'refactor', test: 'test', chore: 'chore', ci: 'chore', build: 'chore', deps: 'chore', style: 'improvement' };
+            for (const number of prNumbers) {
+              const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: number });
+              if (pr.state !== 'open') continue;
+              const prefix = /^([a-z]+)(?:\([^)]*\))?!?:/i.exec(pr.title)?.[1]?.toLowerCase() ?? pr.head.ref.split('/')[0].toLowerCase();
+              const size = pr.additions + pr.deletions;
+              const wanted = ['type: ' + (types[prefix] ?? 'other'), 'size: ' + (size <= 25 ? 'XS' : size <= 100 ? 'S' : size <= 300 ? 'M' : size <= 800 ? 'L' : 'XL')];
+              const attached = new Set(pr.labels.map(label => label.name));
+              const reset = ['opened', 'reopened', 'synchronize', 'ready_for_review'].includes(context.payload.action);
+              const reviewLabels = [...attached].filter(name => name.startsWith('review: ') && Object.hasOwn(catalog, name));
+              if (reset || !reviewLabels.length) wanted.push('review: pending');
+              for (const name of attached) {
+                const managed = Object.hasOwn(catalog, name);
+                if (managed && !wanted.includes(name) && (name.startsWith('type: ') || name.startsWith('size: ') || (reset && name.startsWith('review: ')))) {
+                  try { await github.rest.issues.removeLabel({ owner, repo, issue_number: number, name }); }
+                  catch (error) { if (error.status !== 404) throw error; }
+                }
+              }
+              await github.rest.issues.addLabels({ owner, repo, issue_number: number, labels: wanted });
+            }
