@@ -12,3 +12,7 @@ Treat every localized README as a product introduction, not a repository setup g
 - When adopting Oddmash UI, pin a reviewed commit until an approved package release exists and verify visual geometry, focus behavior, extension permissions, privacy tests, and bundle impact.
 
 Before handoff, run `npm test`, `npm run build`, and—when extension behavior or UI changes—`npm run test:e2e`. Explain any permission, captured-field, or privacy-boundary change explicitly.
+
+## Public contribution language
+
+Write issue and pull request titles, bodies, public review discussions, commit messages, and changelog entries in English. Use the shared English issue and PR templates from [Oddmash](https://github.com/Oddmash/.github/blob/main/CONTRIBUTING.md). Preserve existing product documentation localization and provide translation help when needed.
