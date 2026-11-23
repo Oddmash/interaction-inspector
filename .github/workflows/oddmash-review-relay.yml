@@ -1,0 +1,52 @@
+name: Oddmash review relay
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+permissions:
+  pull-requests: read
+jobs:
+  dispatch:
+    if: github.event_name == 'pull_request_target' || github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
+        env:
+          REVIEWER_DISPATCH_TOKEN: ${{ secrets.REVIEWER_DISPATCH_TOKEN }}
+        with:
+          script: |
+            const token = process.env.REVIEWER_DISPATCH_TOKEN;
+            if (!token) {
+              core.notice('Reviewer relay is waiting for its scoped dispatch credential.');
+              return;
+            }
+            const { owner, repo } = context.repo;
+            const repository = owner + '/' + repo;
+            const allowed = ['Oddmash/.github', 'Oddmash/interaction-inspector', 'Oddmash/oddmash-ui', 'Oddmash/Vertactics', 'Oddmash/kowrap'];
+            if (!allowed.includes(repository) || context.payload.repository?.private) return;
+            let numbers = [];
+            if (context.eventName === 'pull_request_target') {
+              const pr = context.payload.pull_request;
+              if (!pr || pr.draft || pr.base.repo.full_name !== repository) return;
+              numbers = [pr.number];
+            } else {
+              const run = context.payload.workflow_run;
+              if (!run || run.event !== 'pull_request' || !/^[a-f0-9]{40}$/i.test(run.head_sha)) return;
+              const open = await github.paginate(github.rest.pulls.list, { owner, repo, state: 'open', per_page: 100 });
+              const associated = new Set((run.pull_requests ?? []).map(pr => pr.number));
+              numbers = open.filter(pr => !pr.draft && (pr.head.sha === run.head_sha || pr.merge_commit_sha === run.head_sha || associated.has(pr.number))).map(pr => pr.number);
+            }
+            for (const number of [...new Set(numbers)].filter(n => Number.isSafeInteger(n) && n > 0).slice(0, 10)) {
+              const result = await fetch('https://api.github.com/repos/Oddmash/oddmash-agents/actions/workflows/organization-review.yml/dispatches', {
+                method: 'POST',
+                redirect: 'error',
+                headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'X-GitHub-Api-Version': '2022-11-28' },
+                body: JSON.stringify({ ref: 'main', inputs: { repository, pr_number: String(number) } }),
+                signal: AbortSignal.timeout(20000)
+              });
+              if (!result.ok) throw new Error('Reviewer dispatch failed (' + result.status + ')');
+              core.info('Queued review for ' + repository + '#' + number);
+            }
