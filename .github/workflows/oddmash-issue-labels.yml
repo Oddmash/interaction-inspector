@@ -1,4 +1,4 @@
-name: Oddmash issue label catalog
+name: Issue Labels
 on:
   push:
     branches: [develop, main]
