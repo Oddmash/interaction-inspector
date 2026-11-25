@@ -1,4 +1,4 @@
-name: Oddmash review relay
+name: Agent Review Relay
 on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]

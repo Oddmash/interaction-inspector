@@ -1,4 +1,4 @@
-name: Oddmash PR labels
+name: PR Labels
 on:
   push:
     branches: [main]
