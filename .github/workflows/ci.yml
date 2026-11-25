@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    branches: [develop, main]
     types: [opened, reopened, synchronize, edited, ready_for_review]
   workflow_dispatch:
 
@@ -32,6 +33,22 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
+          fetch-depth: 0
+      - name: Determine whether browser verification is required
+        id: browser
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          base=""
+          case "$GITHUB_EVENT_NAME" in
+            pull_request) base=$(git rev-parse HEAD^1) ;;
+            push) base=$(git rev-parse --quiet --verify "${BEFORE}^{commit}" || true) ;;
+          esac
+          required=true
+          if [[ -n "$base" ]] && git diff --quiet --no-renames "$base" HEAD -- . ':(exclude)tests/privacy.test.mjs'; then
+            required=false
+          fi
+          echo "required=$required" >> "$GITHUB_OUTPUT"
       - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
@@ -39,22 +56,29 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm run tokens:check
-      - run: pnpm test
-      - run: pnpm run build
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm run test:e2e
+      - name: Privacy unit tests
+        run: pnpm test
+      - name: Build extension
+        run: pnpm run build
+      - name: Install Chromium
+        if: steps.browser.outputs.required == 'true'
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Chromium extension E2E
+        if: steps.browser.outputs.required == 'true'
+        run: pnpm run test:e2e
 
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.browser.outputs.required == 'true'
         with:
           name: inspector-renewal-captures
           path: test-results/renewal/
           if-no-files-found: warn
+          retention-days: 7
 
   verify:
     needs: [scope, extension]
     if: always()
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     timeout-minutes: 5
     steps:
       - name: Confirm appropriate checks passed
