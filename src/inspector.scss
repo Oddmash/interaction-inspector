@@ -19,22 +19,22 @@
   pointer-events: auto;
   background: var(--om-semantic-color-bg);
   color: var(--om-semantic-color-text);
-  border: 1px solid var(--om-inspector-panel-border);
+  border: var(--om-semantic-border-width) solid var(--om-inspector-panel-border);
   border-radius: 12px;
   box-shadow: 0 12px 36px #0007;
-  padding: 16px;
+  padding: var(--om-semantic-space-lg);
   font: 13px/1.5 system-ui, sans-serif;
   direction: ltr;
 
   header, .controls {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--om-semantic-space-sm);
   }
 
-  header { justify-content: space-between; margin-bottom: 12px; }
+  header { justify-content: space-between; margin-bottom: var(--om-semantic-space-md); }
   h1 { font-size: 17px; margin: 0; }
-  h2 { font-size: 13px; margin: 14px 0 4px; }
+  h2 { font-size: 13px; margin: 14px 0 var(--om-semantic-space-xs); }
   h2 span, time, p { color: var(--om-semantic-color-muted); }
   p { margin: 6px 0; }
   button {
@@ -44,9 +44,9 @@
     font: inherit;
     color: inherit;
     background: var(--om-semantic-color-surface);
-    border: 1px solid var(--om-semantic-color-border);
+    border: var(--om-semantic-border-width) solid var(--om-semantic-color-border);
     border-radius: 6px;
-    padding: 4px 9px;
+    padding: var(--om-semantic-space-xs) 9px;
     cursor: pointer;
   }
   button.om-button:hover:not(:disabled), button.om-button[aria-pressed='true'] { background: var(--om-inspector-hover); }
@@ -54,9 +54,9 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 4px 12px;
+    gap: var(--om-semantic-space-xs) var(--om-semantic-space-md);
     margin: 6px 0;
-    padding: 4px 8px 8px;
+    padding: var(--om-semantic-space-xs) var(--om-semantic-space-sm) var(--om-semantic-space-sm);
     font: inherit;
   }
 
@@ -65,11 +65,11 @@
     width: auto;
     min-height: 28px;
     font: inherit;
-    padding: 3px 4px;
+    padding: 3px var(--om-semantic-space-xs);
   }
   .filters label:has(:disabled) { color: var(--om-semantic-color-muted); }
   :is(button, select, input):focus-visible { outline: 2px solid var(--om-semantic-color-focus); outline-offset: 2px; }
-  dl { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 8px; margin: 0; }
+  dl { display: grid; grid-template-columns: 1fr 1fr; gap: 2px var(--om-semantic-space-sm); margin: 0; }
   dl div { display: contents; }
   dd { margin: 0; }
 }
@@ -84,8 +84,8 @@
   li {
     display: grid;
     grid-template-columns: 76px 1fr 1fr;
-    padding: 4px 0;
-    border-bottom: 1px solid #323b48;
+    padding: var(--om-semantic-space-xs) 0;
+    border-bottom: var(--om-semantic-border-width) solid #323b48;
   }
 }
 
@@ -103,8 +103,8 @@
   scrollbar-width: thin;
 
   header {
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--om-inspector-panel-border);
+    padding-bottom: var(--om-semantic-space-md);
+    border-bottom: var(--om-semantic-border-width) solid var(--om-inspector-panel-border);
   }
 
   header button {
@@ -121,7 +121,7 @@
 
   .controls button {
     min-height: 36px;
-    padding: 6px 8px;
+    padding: 6px var(--om-semantic-space-sm);
     text-align: center;
     overflow-wrap: anywhere;
   }
@@ -131,10 +131,10 @@
   .recording-status {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
+    gap: var(--om-semantic-space-sm);
+    padding: var(--om-semantic-space-sm) 10px;
     margin: 10px 0 0;
-    border: 1px solid var(--om-inspector-panel-border);
+    border: var(--om-semantic-border-width) solid var(--om-inspector-panel-border);
     border-radius: 6px;
     min-height: 38px;
   }
@@ -144,7 +144,7 @@
     height: 9px;
     flex: 0 0 auto;
     border-radius: 50%;
-    border: 1px solid currentColor;
+    border: var(--om-semantic-border-width) solid currentColor;
   }
 
   .recording-status[data-recording='true'] .status-marker {
@@ -158,19 +158,19 @@
 
   .copy-status {
     min-height: 1.5em;
-    margin: 4px 0 0;
+    margin: var(--om-semantic-space-xs) 0 0;
     overflow-wrap: anywhere;
   }
 
   h2 {
-    padding-top: 12px;
-    margin: 8px 0;
-    border-top: 1px solid var(--om-inspector-panel-border);
+    padding-top: var(--om-semantic-space-md);
+    margin: var(--om-semantic-space-sm) 0;
+    border-top: var(--om-semantic-border-width) solid var(--om-inspector-panel-border);
   }
 
   dl {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 6px 12px;
+    gap: 6px var(--om-semantic-space-md);
     padding: 10px;
     border-radius: 6px;
     background: var(--om-semantic-color-surface);
@@ -183,17 +183,17 @@
   .filters {
     border-color: var(--om-inspector-panel-border);
     border-radius: 6px;
-    padding: 8px;
+    padding: var(--om-semantic-space-sm);
   }
 
   .filters .om-select { min-height: 32px; }
 
   .empty-state {
-    padding: 16px 12px;
-    border: 1px dashed var(--om-inspector-panel-border);
+    padding: var(--om-semantic-space-lg) var(--om-semantic-space-md);
+    border: var(--om-semantic-border-width) dashed var(--om-inspector-panel-border);
     border-radius: 6px;
     text-align: center;
-    margin-block: 8px;
+    margin-block: var(--om-semantic-space-sm);
   }
 }
 
@@ -203,7 +203,7 @@
   li {
     grid-template-columns: minmax(54px, .8fr) minmax(0, 1fr) minmax(0, 1fr);
     gap: 6px;
-    padding: 8px 4px;
+    padding: var(--om-semantic-space-sm) var(--om-semantic-space-xs);
     border-color: var(--om-inspector-panel-border);
     overflow-wrap: anywhere;
   }
