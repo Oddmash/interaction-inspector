@@ -25,7 +25,7 @@ jobs:
             }
             const { owner, repo } = context.repo;
             const repository = owner + '/' + repo;
-            const allowed = ['Oddmash/.github', 'Oddmash/interaction-inspector', 'Oddmash/oddmash-ui', 'Oddmash/Vertactics', 'Oddmash/kowrap'];
+            const allowed = ['Oddmash/.github', 'Oddmash/interaction-inspector', 'Oddmash/oddmash-ui', 'Oddmash/Vertactics', 'Oddmash/juliya'];
             if (!allowed.includes(repository) || context.payload.repository?.private) return;
             let numbers = [];
             if (context.eventName === 'pull_request_target') {
