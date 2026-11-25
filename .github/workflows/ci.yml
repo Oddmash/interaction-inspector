@@ -21,7 +21,7 @@ jobs:
       contents: read
       issues: read
       pull-requests: read
-    uses: Oddmash/.github/.github/workflows/ci-scope.yml@d470ec5f76590ca90ca9ba1eda4ba550c5b7a98e
+    uses: Oddmash/.github/.github/workflows/ci-scope.yml@ci-v1
     with:
       profile: extension
   extension:
