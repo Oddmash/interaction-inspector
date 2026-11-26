@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { chromium } from 'playwright';
 
-test('MV3 inspector picks, observes, protects input, stops, resets, and closes', { timeout: 45_000 }, async () => {
+test('MV3 inspector picks, cancels, observes, protects input, stops, resets, and closes', { timeout: 45_000 }, async () => {
   const temporary = await mkdtemp(join(tmpdir(), 'interaction-inspector-'));
   const extension = join(temporary, 'extension');
   const html = await readFile(new URL('../demo/index.html', import.meta.url));
@@ -55,7 +55,18 @@ test('MV3 inspector picks, observes, protects input, stops, resets, and closes',
     const pickButton = panel.getByRole('button', { name: 'Pick element' });
     await pickButton.hover();
     assert.equal(await pickButton.evaluate((node) => getComputedStyle(node).backgroundColor), 'rgb(57, 73, 96)');
-    await panel.getByRole('button', { name: 'Pick element' }).click();
+
+    await pickButton.click();
+    assert.equal(await pickButton.getAttribute('aria-pressed'), 'true');
+    await page.keyboard.press('Escape');
+    assert.equal(await pickButton.getAttribute('aria-pressed'), 'false');
+
+    await button.click();
+    assert.equal(await button.getAttribute('aria-expanded'), 'true');
+    await button.click();
+    assert.equal(await button.getAttribute('aria-expanded'), 'false');
+
+    await pickButton.click();
     await button.hover();
     const { root: documentNode } = await cdp.send('DOM.getDocument', { depth: -1, pierce: true });
     const flatten = (node) => [node, ...[...(node.children ?? []), ...(node.shadowRoots ?? [])].flatMap(flatten)];
