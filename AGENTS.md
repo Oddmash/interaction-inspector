@@ -17,6 +17,10 @@ Treat every localized README as a product introduction, not a repository setup g
 
 Before handoff, run `pnpm test`, `pnpm run build`, and—when extension behavior or UI changes—`pnpm run test:e2e`. Explain any permission, captured-field, or privacy-boundary change explicitly.
 
+## GitHub account use
+
+Follow the [Oddmash GitHub account policy](https://github.com/Oddmash/.github/blob/main/docs/github-account-policy.md). Use `arvynoo` for AI-authored commits, issues and PRs with command-scoped authentication and a separate checkout or worktree per session. Only `qtaghdi` gives final approval to and manually merges external contributions.
+
 ## Public contribution language
 
 Write issue and pull request titles, bodies, public review discussions, commit messages, and changelog entries in English. Use the shared English issue and PR templates from [Oddmash](https://github.com/Oddmash/.github/blob/main/CONTRIBUTING.md). Preserve existing product documentation localization and provide translation help when needed.
