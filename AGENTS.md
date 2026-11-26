@@ -1,5 +1,7 @@
 # Interaction Inspector working agreements
 
+Follow the [Oddmash concurrent work claims](https://github.com/Oddmash/.github/blob/main/AGENTS.md#concurrent-work-claims) and organization collaboration rules before implementation, review, CI retries, or merges.
+
 Interaction Inspector is a privacy-sensitive Chrome extension. Preserve its narrow collection model and browser permission boundary before optimizing UI or developer ergonomics.
 
 Treat every localized README as a product introduction, not a repository setup guide. Explain what Interaction Inspector does, who it helps, a concrete debugging use case, its capabilities, privacy model, and scope. Do not put clone, install, local-run, build, test, release, or contributor workflows in a README; keep all development and verification details in `CONTRIBUTING.md`. Keep all four README translations, language links, claims, and visuals synchronized.
