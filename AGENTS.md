@@ -1,5 +1,7 @@
 # Interaction Inspector working agreements
 
+Follow the [Oddmash concurrent work claims](https://github.com/Oddmash/.github/blob/main/AGENTS.md#concurrent-work-claims) and organization collaboration rules before implementation, review, CI retries, or merges.
+
 Follow the [Oddmash review follow-up guidance](https://github.com/Oddmash/.github/blob/main/docs/AI-CODE-REVIEW.md#following-up-on-review-findings) when addressing review comments.
 
 Interaction Inspector is a privacy-sensitive Chrome extension. Preserve its narrow collection model and browser permission boundary before optimizing UI or developer ergonomics.
